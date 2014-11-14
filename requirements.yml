@@ -1,0 +1,4 @@
+- src: git+https://git.forgeservicelab.fi/ansible-roles/timezone.git
+- src: git+https://git.forgeservicelab.fi/ansible-roles/forge_ssl.git
+- src: git+https://git.forgeservicelab.fi/ansible-roles/forge_users.git
+- src: git+https://git.forgeservicelab.fi/ansible-roles/simplesamlphp.git
