@@ -1,0 +1,37 @@
+# testidp.forgeservicelab.fi has DNS IP 192.166.24.159
+# ansible-spawn -p testidp.saml.yml -i 9b4e2c43-2142-4528-842b-cacf5a1b44b6 -l 193.166.24.159 -s digile,world
+- hosts: "{{ h }}"
+
+  vars_files:
+    # secrets.yml must define
+    # - gitlab_private_token
+    # - simplesamlphp_admin_password
+    # - simplesamlphp_ldap_binder_password
+    - secrets.yml
+
+  pre_tasks:
+    - hostname:
+        name: testidp.forgeservicelab.fi
+    - set_fact:
+        ansible_hostname: testidp
+        ansible_fqdn: testidp.forgeservicelab.fi
+
+  roles:
+    # git clone https://git.forgeservicelab.fi/ansible-roles/timezone.git
+    - role: timezone
+    # git clone https://git.forgeservicelab.fi/ansible-roles/forge_ssl.git
+    - role: forge_ssl
+    # git clone https://git.forgeservicelab.fi/ansible-roles/forge_users.git
+    - role: forge_users
+      forge_users_private_token: "{{ gitlab_private_token }}"
+      forge_users_list:
+        - user1
+        - user2
+      tags: users
+    # git clone https://git.forgeservicelab.fi/ansible-roles/simplesamlphp.git
+    - role: simplesamlphp
+      simplesamlphp_admin_password: "{{ simplesamlphp_admin_password }}"
+      simplesamlphp_ldap_binder_password: "{{ simplesamlphp_ldap_binder_password }}"
+      simplesamlphp_suburi: ""
+      tags: app
+
